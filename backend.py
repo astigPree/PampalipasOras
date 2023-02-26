@@ -119,19 +119,18 @@ class DataManagement:
         found = []
         passing = 45
         for key, values in self.foods_list.items():
-            if fuzz.ratio(key, find) > passing:
-                found.append(key)
-            elif fuzz.ratio(values[1], find) > passing:
-                found.append(key)
-            elif fuzz.ratio(str(values[2]), find) > passing:
-                found.append(key)
-            elif fuzz.WRatio(str(values[2]), find) > passing:
-                found.append(key)
-            elif fuzz.WRatio(str(values[1]), find) > passing:
-                found.append(key)
-            elif fuzz.WRatio(key, find) > passing:
-                found.append(key)
-        return found
+            ratio = []
+            if fuzz.WRatio(str(values[2]), find) > passing:
+                ratio.append(fuzz.WRatio(str(values[2]), find))
+            if fuzz.WRatio(str(values[1]), find) > passing:
+                ratio.append(fuzz.WRatio(str(values[1]), find))
+            if fuzz.WRatio(key, find) > passing:
+                ratio.append(fuzz.WRatio(key, find))
+            if ratio :
+                found.append( ( max(ratio) , key ) )
+
+        found.sort(key = lambda x : x[0] , reverse=True)
+        return [ food[1] for food in found  ]
 
     def get_foods_in_folder(self, sep=","):
         os.makedirs(self.folderbase, exist_ok=True)
@@ -165,4 +164,6 @@ class DataManagement:
 
 
 if __name__ == "__main__":
-    pass
+    a = [ (20 , 'a') , (30 , 'b') , (10 , 'c') ]
+    a.sort(key=lambda x : x[0] , reverse=True)
+    print(a)
