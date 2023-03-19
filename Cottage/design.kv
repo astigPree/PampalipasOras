@@ -1,0 +1,430 @@
+#:import chex kivy.utils.get_color_from_hex
+
+MainWidget:
+    canvas.before :
+        Color :
+            rgba : chex('102b14')
+        Rectangle :
+            pos : self.pos
+            size : self.size
+
+    spacing : dp(2)
+    padding : [ dp(1) , dp(0) , dp(1) , dp(2) ]
+
+    cottage_selections : cottage_selections
+    cottage_modifier : cottage_modifier
+
+    CottageSelections:
+        id : cottage_selections
+        size_hint : 0.5 , 1
+
+    CottageSelectedModifier :
+        id : cottage_modifier
+        size_hint : 0.5 , 1
+
+
+
+# =============== Subpart of Main Widget
+<CottageSelectedModifier> :
+    orientation : 'vertical'
+    spacing : dp(2)
+    padding : [ dp(0) , dp(0) , dp(2) , dp(0) ]
+
+    cottage_selected_container : cottage_selected_container
+
+    CottageSelectedModifierTitleBar :
+        size_hint : 1 , 0.05
+
+    CottageSelectedContainer :
+        id : cottage_selected_container
+        size_hint : 1 , 0.95
+
+
+<CottageSelectedContainer> :
+    canvas.before :
+        Color :
+            rgba : chex('d6daa5')
+        RoundedRectangle :
+            pos : self.pos
+            size : self.size
+            radius : ( 10 , 10 , 10 , 10 )
+
+    orientation : 'vertical'
+    spacing : sp(3)
+
+    cottage_selected_container : cottage_selected_container
+
+    BoxLayout :
+        size_hint : 1 , 0.09
+        padding : [ dp(2) , dp(5) , dp(15) , dp(5) ]
+
+        CottageSearchingLabel :
+            text : 'Search Cottage : '
+            size_hint : 0.3 , 1
+
+        MDTextField:
+            mode: "round"
+            radius : ( 5 , 5 , 5 , 5 )
+            size_hint : 0.7 , 1
+            font_size : sp(20)
+            font_name : 'font'
+
+    ScrollView :
+        size_hint : 1 , 0.91
+
+        MDGridLayout :
+            id : cottage_selected_container
+            adaptive_height : True
+            cols : 1
+            spacing : dp(20)
+            padding : [ dp(5) , dp(10) , dp(5) , dp(10) ]
+
+
+<CottageInModifier>:
+    canvas.before :
+        Color :
+            rgba : chex('c1ba2c')
+        RoundedRectangle :
+            pos : self.pos
+            size : self.size
+            radius : ( 5 , 5 , 5 , 5 )
+
+    size_hint : 1 , None
+    height : 400
+    orientation : 'vertical'
+    padding : [ dp(5) , dp(5) , dp(5) , dp(0) ]
+
+    BoxLayout :
+        size_hint : 1 , 0.4
+        padding : [ dp(5) , dp(5) , dp(5) , dp(5) ]
+        canvas.before :
+            Color :
+                rgba : chex('55aed5')
+            RoundedRectangle :
+                pos : self.pos
+                size : self.size
+                radius : ( 10 , 10 , 10 , 10 )
+
+        FullViewerImage :
+            radius : ( 5 , 5, 5 , 5 )
+            source : root.image
+            size_hint : 0.3 , 1
+
+        BoxLayout :
+            size_hint : 0.7 , 1
+            orientation : 'vertical'
+
+            Label:
+                text : 'Coca Cola Cottage' * 5
+                font_size : sp(20)
+                font_name : 'font'
+                color : chex('b8cbcd')
+                text_size: self.width, None
+                size_hint : 1 , 0.7
+                halign : 'center'
+                color : chex('102b14')
+
+            BoxLayout :
+                size_hint : 1 , 0.3
+
+                MDLabel :
+                    size_hint  : 0.8 , 1
+                    text : f'  Price : ${root.price}'
+                    font_name : 'numfont'
+                    font_size : sp(16)
+                    color : chex('dfddcf')
+
+                MDFillRoundFlatButton :
+                    size_hint : 0.2 , 1
+                    md_bg_color : chex('98a782')
+                    text : 'Selected'
+                    font_name : 'font'
+                    font_size : sp(17)
+                    text_color : chex('1a411e')
+
+
+    BoxLayout :
+        size_hint : 1 , 0.6
+
+        # ------> Information
+        BoxLayout :
+            orientation : 'vertical'
+            padding : [ dp(5) , dp(5) , dp(5) , dp(5) ]
+            spacing : dp(2)
+            size_hint : 0.7 , 1
+
+            # -----> Person
+            CottageInformationLabel :
+                text : f'  Person            :  {root.persons:.0f}'
+
+            # -----> Items
+            CottageInformationLabel :
+                text : f'  Items             :  ${root.items:.2f}'
+
+            # -----> Electricity
+            CottageInformationLabel :
+                text : f'  Electicity       :  ${root.electric:.2f}'
+
+            # -----> Water
+            CottageInformationLabel :
+                text : f'  Water            :  ${root.water:.2f}'
+
+            # -----> Price
+            CottageInformationLabel :
+                text : f'  Price              :  ${root.price:.2f}'
+
+            # -----> Total
+            CottageInformationLabel :
+                text : f'  Total              : ${root.total:.2f}'
+
+
+
+        # ------> Information Configurations
+        BoxLayout :
+            orientation : 'vertical'
+            padding : [ dp(5) , dp(5) , dp(5) , dp(5) ]
+            spacing : dp(2)
+            size_hint : 0.3 , 1
+
+            CottageInformationInput:
+                size_hint : 1 , 0.16
+                on_text :
+                    self.checkText()
+                    root.checkInput( 'persons' , self.text )
+
+            CottageInformationInput:
+                size_hint : 1 , 0.16
+                on_text :
+                    self.checkText()
+                    root.checkInput( 'items' , self.text )
+
+            CottageInformationInput:
+                size_hint : 1 , 0.16
+                on_text :
+                    self.checkText()
+                    root.checkInput( 'electric' , self.text )
+
+            CottageInformationInput:
+                size_hint : 1 , 0.16
+                on_text :
+                    self.checkText()
+                    root.checkInput( 'water' , self.text )
+
+            BoxLayout :
+                orientation : 'vertical'
+                size_hint : 1 , .32
+                spacing : dp(2)
+
+                ModifierButton :
+                    text : 'create reciept'
+                    size_hint : 1 , .5
+                ModifierButton :
+                    text : 'remove cottage'
+                    size_hint : 1 , 0.5
+
+<CottageInformationInput> :
+    halign : 'center'
+    valign : 'center'
+    font_size : sp(21)
+    font_name : 'numfont'
+    multiline : False
+
+
+
+<CottageSelections> :
+    orientation : 'vertical'
+    spacing : dp(2)
+    padding : [ dp(2) , dp(0) , dp(0) , dp(0) ]
+
+    cottage_container : cottage_container
+
+    CottageSelectionsTitleBar :
+        size_hint : 1 , 0.05
+
+    CottageSelectionsContainer :
+        id : cottage_container
+        size_hint : 1 , 0.85
+
+    Label :
+        size_hint : 1 , 0.005
+    BoxLayout :
+        size_hint : 1 , 0.1
+        canvas.before :
+            Color :
+                rgba : chex('55aed5')
+            RoundedRectangle :
+                pos : self.pos
+                size : self.size
+                radius : ( 30 , 30 , 0 , 0 )
+
+        CottageSelectionButton :
+            text : 'Selected'
+            color : chex('718560') if root.current != self.text.lower() else 'white'
+
+            on_release :
+                root.displaySelected()
+                root.current = self.text.lower()
+
+
+        CottageSelectionButton :
+            text : 'All'
+            color : chex('718560') if root.current != self.text.lower() else 'white'
+
+            on_release :
+                root.displayAll()
+                root.current = self.text.lower()
+
+
+        CottageSelectionButton :
+            text : 'Unselected'
+            color : chex('718560') if root.current != self.text.lower() else 'white'
+
+            on_release :
+                root.displayUnselected()
+                root.current = self.text.lower()
+
+
+
+<CottageSelectionsContainer>:
+    canvas.before :
+        Color :
+            rgba : chex('#96c6d6')
+        RoundedRectangle :
+            pos : self.pos
+            size : self.size
+            radius : ( 5 , 5 , 0 , 0 )
+
+    orientation : 'vertical'
+    spacing : sp(3)
+
+    list_of_cottage : list_of_cottage
+
+    BoxLayout :
+        size_hint : 1 , 0.1
+        padding : [ dp(2) , dp(5) , dp(15) , dp(5) ]
+
+        CottageSearchingLabel :
+            text : 'Search Cottage : '
+            size_hint : 0.3 , 1
+
+        MDTextField:
+            mode: "round"
+            radius : ( 5 , 5 , 5 , 5 )
+            size_hint : 0.7 , 1
+            font_size : sp(20)
+            font_name : 'font'
+
+    ScrollView :
+        size_hint : 1 , 0.9
+
+        MDGridLayout :
+            id : list_of_cottage
+            adaptive_height : True
+            cols : 1
+            spacing : dp(10)
+            padding : [ dp(5) , dp(5) , dp(5) , dp(10) ]
+
+
+
+<CottageInSelections>:
+    canvas.before :
+        Color :
+            rgba : chex('0e79a2')
+        RoundedRectangle :
+            pos : self.pos
+            size : self.size
+            radius : ( 5 , 5, 10 , 10 )
+
+    size_hint : 1 , None
+    height : 100
+    padding : [ dp(5) , dp(5) , dp(5) , dp(5) ]
+
+    FullViewerImage :
+        radius : ( 10 , 10 , 10 , 10 )
+        size_hint : 0.2 , 1
+        source : root.image
+
+    BoxLayout :
+        size_hint : 0.8 , 1
+        orientation : 'vertical'
+
+        Label:
+            text : root.name
+            font_size : sp(20)
+            font_name : 'font'
+            color : chex('b8cbcd')
+            text_size: self.width, None
+            size_hint : 1 , 0.7
+            halign : 'center'
+            color : chex('102b14')
+
+        BoxLayout :
+            size_hint : 1 , 0.3
+
+            MDLabel :
+                size_hint  : 0.8 , 1
+                text : f'  Price : ${root.price}'
+                font_name : 'numfont'
+                font_size : sp(16)
+                color : chex('dfddcf')
+
+            MDFillRoundFlatButton :
+                size_hint : 0.2 , 1
+                md_bg_color : chex('98a782')
+                text : 'Unselected' if not root.datas['selected'] else ' Selected '
+                font_name : 'font'
+                font_size : sp(17)
+                text_color : chex('1a411e') if root.datas['selected'] else 'white'
+
+                on_release :
+                    root.selectIt()
+
+
+
+# =============== Added design for Main Widget
+<ModifierButton@MDFillRoundFlatButton> :
+    font_size : sp(17)
+    font_name : 'font'
+    text_color : chex('112600')
+    md_bg_color : 1 ,1 ,1 ,1
+
+<CottageInformationLabel@MDLabel>:
+    font_size : sp(16)
+    font_name : 'numfont'
+    color : chex('112600')
+
+<CottageSearchingLabel@Label>:
+    font_name : 'font'
+    font_size : sp(18)
+    color : chex('102b14')
+
+<CottageSelectionButton@Button>:
+    background_color : 0 , 0 , 0 , 0
+    font_name : 'font'
+    font_size : sp(25)
+
+<CottageSelectedModifierTitleBar@Label>:
+    canvas.before :
+        Color :
+            rgba : chex('#c4c140')
+        RoundedRectangle :
+            pos : self.pos
+            size : self.size
+            radius : ( 0 , 0 , 10 , 10 )
+    font_name : 'font'
+    font_size : sp(18)
+    text : 'S e l e c t e d    C o t t a g e s'
+    color : 'black'
+
+<CottageSelectionsTitleBar@Label>:
+    canvas.before :
+        Color :
+            rgba : chex('#0fa8ec')
+        RoundedRectangle :
+            pos : self.pos
+            size : self.size
+            radius : ( 0 , 0 , 10 , 10 )
+    font_name : 'font'
+    font_size : sp(18)
+    text : 'C o t t a g e s'
+    color : 'black'
